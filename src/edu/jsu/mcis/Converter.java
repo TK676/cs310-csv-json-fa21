@@ -63,6 +63,8 @@ public class Converter {
         
         try {
             
+            //Creates CSVReader and iterator
+            
             CSVReader reader = new CSVReader(new StringReader(csvString));
             List<String[]> full = reader.readAll();
             Iterator<String[]> iterator = full.iterator();
@@ -74,24 +76,30 @@ public class Converter {
             JSONArray data = new JSONArray();
             String[] currentRow = iterator.next();
 
+            //Adds column header elements
             for (int i = 0; i < currentRow.length; ++i) {
                 colHeader.add(currentRow[i]);
             }
-
+            
+            //Iterates through remaining CSV rows
             while (iterator.hasNext()) {
+                //Creates container for next row
                 currentRow = iterator.next();
                 currentData = new JSONArray();
                                         
                 for (int i = 0; i < currentRow.length; ++i){
                     if (i == 0){
+                        //Adds headers element
                         rowHeader.add(currentRow[i]);
                     }
                     else {
+                        //Adds remaining elements
                         int dataStringToInt = Integer.parseInt(currentRow[i]);
                         currentData.add(dataStringToInt);
                     }
                 }
                 
+                //Adds rows to data
                 data.add(currentData);
                 
             }
@@ -100,11 +108,13 @@ public class Converter {
             jsonObject.put("rowHeaders", rowHeader);
             jsonObject.put("data", data);
             
+            //Defines results
             results = JSONValue.toJSONString(jsonObject);            
         }        
         
         catch(Exception e) { return e.toString(); }
         
+        //Returns results
         return results.trim();
         
     }
@@ -116,24 +126,29 @@ public class Converter {
         
         try {
 
+            //Creates Writer
             StringWriter writer = new StringWriter();
             CSVWriter csvWriter = new CSVWriter(writer, ',', '"', '\\', "\n");
             
+            //Creates JSON Parser and Parses JSON Data
             JSONParser parser = new JSONParser();
             JSONObject jsonObject = (JSONObject)parser.parse(jsonString);
-            
             JSONArray colHeadersJsonArray = (JSONArray)jsonObject.get("colHeaders");
             JSONArray rowHeadersJsonArray = (JSONArray)jsonObject.get("rowHeaders");
             JSONArray dataJsonArray = (JSONArray)jsonObject.get("data");
             
+            //Creates String[] array for column headers
             String[] colHeaders = new String[5];
             
+            //Copies column headers
             for(int i = 0; i < colHeadersJsonArray.size(); i++) {
                 colHeaders[i] = (String)colHeadersJsonArray.get(i);
             }
             
+            //Writes column headers
             csvWriter.writeNext(colHeaders);
             
+            //Writes row headers and row data
             for(int i = 0; i < rowHeadersJsonArray.size(); i++) {
                 JSONArray currentLineOfData = (JSONArray)dataJsonArray.get(i);
                 String[] currentLine = new String[5];
@@ -148,6 +163,7 @@ public class Converter {
                 
             }
             
+            //Defines results
             results = writer.toString();
             
         }
@@ -156,6 +172,7 @@ public class Converter {
             return e.toString();
         }
         
+        //Returns results
         return results.trim();
         
     }
