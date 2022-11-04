@@ -1,4 +1,4 @@
-# cs310-csv-json-fa21
+# CS310-CSVtoJSON
 
 This project was completed for my CS310 (Software Engineering 1) class. I was tasked with creating converters to translate a specific data set to and from equivalent CSV and JSON formats. I had to fork my professors repository on GitHub and work from the files of code we were given. We had conversion methods that were given to us and we had to complete them and make sure the ConverterTest.java file successfully ran all four tests.
 
